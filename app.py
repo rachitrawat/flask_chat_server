@@ -89,7 +89,10 @@ def handle_setup(req_obj, flag):
             available_wallets.remove(wallet_id)
             user_dict[uid] = {"pwd": pwd, "wallet": "user" + str(wallet_id)}
             # initial registration msg
-            if registerUser(user_dict[uid]['wallet']) != 0 or createMsg("$HELLO$" + " " + uid) != 0:
+            tmp_dict = {}
+            tmp_dict['email'] = uid
+            tmp_dict['msgtext'] = "$HELLO$"
+            if registerUser(user_dict[uid]['wallet']) != 0 or createMsg(tmp_dict) != 0:
                 user_dict.pop(uid)
                 available_wallets.append(wallet_id)
                 return 1
@@ -110,9 +113,9 @@ def handle_setup(req_obj, flag):
                 return 1
 
 
-def flagMsg(data):
-    msgID = data.split()[0]
-    user = data.split()[1]
+def flagMsg(req_obj):
+    msgID = req_obj['msgID']
+    user = req_obj['email']
     output = "dummy"
 
     try:
@@ -131,8 +134,12 @@ def flagMsg(data):
         return 1
 
 
-def queryAllMsgs(req_obj):
-    msgID = "-1"
+def queryAllMsgs(req_obj, byID=False):
+    if not byID:
+        msgID = "-1"
+    else:
+        msgID = req_obj['msgID']
+
     user = req_obj['email']
     output = "dummy"
 
@@ -171,6 +178,19 @@ def home_post():
             res, raw_query_str = queryAllMsgs(request.form)
             if res == 0:
                 query_lst = utils.format_query(raw_query_str)
+                return render_template('show_query.html', query_lst=query_lst)
+            else:
+                return "Failed to query messages!"
+        elif request.form['submit_button'] == 'Flag Message':
+            res = flagMsg(request.form)
+            if res == 0:
+                return "Message flagged successfully!"
+            else:
+                return "Failed to flag message!"
+        elif request.form['submit_button'] == 'Query Message':
+            res, raw_query_str = queryAllMsgs(request.form, True)
+            if res == 0:
+                query_lst = utils.format_query(raw_query_str, True)
                 return render_template('show_query.html', query_lst=query_lst)
             else:
                 return "Failed to query messages!"

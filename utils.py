@@ -102,15 +102,22 @@ def send_verification_email(recv_addr, pwd):
         return "-1"
 
 
-def format_query(raw_query_str):
+def format_query(raw_query_str, byID=False):
     data = ast.literal_eval(raw_query_str)
     query_lst = []
-    for idx, val in enumerate(data):
-        val['Record']['msgText'] = ' '.join(val['Record']['msgText'].split('__'))
-        if 'owner' in val['Record']:
-            msg = val['Key'] + " " + val['Record']['msgText'] + " " + val['Record']['owner'] + "\n"
+    if not byID:
+        for idx, val in enumerate(data):
+            val['Record']['msgText'] = ' '.join(val['Record']['msgText'].split('__'))
+            if 'owner' in val['Record']:
+                msg = val['Key'] + " " + val['Record']['msgText'] + " " + val['Record']['owner'] + "\n"
+            else:
+                msg = val['Key'] + " " + val['Record']['msgText']
+            query_lst.append(msg)
+    else:
+        if 'owner' in data:
+            msg = ' '.join(data['msgText'].split('__')) + " " + data['owner']
         else:
-            msg = val['Key'] + " " + val['Record']['msgText']
+            msg = ' '.join(data['msgText'].split('__'))
         query_lst.append(msg)
 
     return query_lst
