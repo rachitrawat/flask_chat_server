@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fabchat</title>
+</head>
+<body>
+<h1>New user? <a href="{{ url_for('register') }}">Register</a></h1>
+<form method="post">
+    E-mail: <input type="email" name="email">
+    <br>
+    Password: <input type="password" name="pwd">
+    <br>
+    Message: <input name="msgtext">
+    <input type="submit" name="submit_button" value="Post Message">
+    <br>
+    <input type="submit" name="submit_button" value="See All Messages">
+</form>
+</body>
+</html>
