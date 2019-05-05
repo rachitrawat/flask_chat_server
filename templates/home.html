@@ -3,7 +3,7 @@
     <h1>New user? <a href="{{ url_for('register') }}">Register</a></h1>
     <form method="post">
         <div>
-            E-mail: <input type="email" size="35" name="email" required>
+            Ashoka Email: <input type="email" size="35" name="email" required pattern="[a-z0-9._%+-]+@ashoka.edu.in">
             <br>
             Password: <input type="password" name="pwd" size="8" required minlength="4">
         </div>

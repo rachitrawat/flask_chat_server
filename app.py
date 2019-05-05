@@ -171,40 +171,42 @@ def home_post():
         if request.form['submit_button'] == 'Post Message':
             if res == 0:
                 createMsg(request.form)
-                return "Message posted successfully!"
+                return render_template('response.html', response="Message posted successfully!")
             else:
-                return "Failed to post message!"
+                return render_template('response.html', response="Failed to post message!")
         elif request.form['submit_button'] == 'See All Messages':
             res, raw_query_str = queryAllMsgs(request.form)
             if res == 0:
                 query_lst = utils.format_query(raw_query_str)
                 return render_template('show_query.html', query_lst=query_lst)
             else:
-                return "Failed to query messages!"
+                return render_template('response.html', response="Failed to query messages!")
         elif request.form['submit_button'] == 'Flag Message':
             res = flagMsg(request.form)
             if res == 0:
-                return "Message flagged successfully!"
+                return render_template('response.html', response="Message flagged successfully!")
             else:
-                return "Failed to flag message!"
+                return render_template('response.html', response="Failed to flag message!")
         elif request.form['submit_button'] == 'Query Message':
             res, raw_query_str = queryAllMsgs(request.form, True)
             if res == 0:
                 query_lst = utils.format_query(raw_query_str, True)
                 return render_template('show_query.html', query_lst=query_lst)
             else:
-                return "Failed to query message!"
+                return render_template('response.html', response="Failed to query message!")
     else:
-        return "Invalid email/password!"
+        return render_template('response.html', response="Invalid email/password!")
 
 
 @app.route('/register', methods=['POST'])
 def register_post():
     res = handle_setup(request.form, "True")
     if res == 0:
-        return "Registration successful! Check your email inbox/spam for password."
+        return render_template('response.html',
+                               response="Registration successful! Check your email inbox/spam for password.")
     else:
-        return "Registration failed! You're already registered. Check your email's inbox/spam folder for password."
+        return render_template('response.html',
+                               response="Registration failed! You're already registered. Check your email's inbox/spam folder for password.")
 
 
 @app.route('/register')

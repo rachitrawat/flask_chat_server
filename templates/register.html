@@ -2,7 +2,7 @@
 {% block content %}
     <h1><a href="{{ url_for('home') }}">Home</a></h1>
     <form method="post">
-        E-mail: <input type="email" name="email">
+        Ashoka Email: <input type="email" name="email" required pattern="[a-z0-9._%+-]+@ashoka.edu.in">
         <br>
         <input type="submit" value="Register">
     </form>
