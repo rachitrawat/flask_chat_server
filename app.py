@@ -6,6 +6,7 @@ import string
 import subprocess
 
 from flask import Flask, render_template, request
+
 import utils
 
 app = Flask(__name__)
@@ -26,7 +27,7 @@ else:
 
 FABRIC_DIR = "/home/" + getpass.getuser() + "/WebstormProjects/hyperledger_project/fabchat/javascript/"
 NODE_PATH = "/home/" + getpass.getuser() + "/node/bin/node"
-DEBUG = True
+DEBUG = False
 
 
 def handle_setup(req_obj, flag):

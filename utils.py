@@ -1,6 +1,6 @@
 import ast
+import collections
 import os
-import random
 import smtplib
 
 
@@ -104,15 +104,18 @@ def send_verification_email(recv_addr, pwd):
 
 def format_query(raw_query_str, byID=False):
     data = ast.literal_eval(raw_query_str)
+    query_dict = {}
     query_lst = []
     if not byID:
         for idx, val in enumerate(data):
             val['Record']['msgText'] = ' '.join(val['Record']['msgText'].split('__'))
             if 'owner' in val['Record']:
-                msg = val['Key'] + " " + val['Record']['msgText'] + " " + val['Record']['owner'] + "\n"
+                query_dict[int(val['Key'])] = val['Record']['msgText'] + " " + val['Record']['owner']
             else:
-                msg = val['Key'] + " " + val['Record']['msgText']
-            query_lst.append(msg)
+                query_dict[int(val['Key'])] = val['Record']['msgText']
+        od = collections.OrderedDict(sorted(query_dict.items()))
+        for k, v in od.items():
+            query_lst.append(str(k) + " " + v)
     else:
         if 'owner' in data:
             msg = ' '.join(data['msgText'].split('__')) + " " + data['owner']
