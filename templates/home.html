@@ -1,24 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Fabchat</title>
-</head>
-<body>
-<h1>New user? <a href="{{ url_for('register') }}">Register</a></h1>
-<form method="post">
-    E-mail: <input type="email" size="35" name="email" required>
-    <br>
-    Password: <input type="password" name="pwd" size="8" required minlength="4">
-    <br>
-    Message: <textarea name="msgtext" maxlength="280" cols="40" rows="6"></textarea>
-    <input type="submit" name="submit_button" value="Post Message">
-    <br>
-    Message ID: <input name="msgID">
-    <input type="submit" name="submit_button" value="Flag Message">
-    <input type="submit" name="submit_button" value="Query Message">
-    <br>
-    <input type="submit" name="submit_button" value="See All Messages">
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <h1>New user? <a href="{{ url_for('register') }}">Register</a></h1>
+    <form method="post">
+        <div>
+            E-mail: <input type="email" size="35" name="email" required>
+            <br>
+            Password: <input type="password" name="pwd" size="8" required minlength="4">
+        </div>
+
+        <div>
+            <textarea name="msgtext" maxlength="280" cols="40" rows="6"
+                      placeholder="Type your message here..."></textarea>
+            <br>
+            <input type="submit" name="submit_button" value="Post Message">
+        </div>
+
+        <input type="submit" name="submit_button" value="See All Messages" id="queryall">
+
+        <div>
+            Message ID: <input name="msgID" size="8">
+            <input type="submit" name="submit_button" value="Flag Message">
+            <input type="submit" name="submit_button" value="Query Message">
+        </div>
+
+    </form>
+{% endblock %}
