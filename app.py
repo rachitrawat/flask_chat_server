@@ -164,7 +164,7 @@ def queryAllMsgs(req_obj, byID=False):
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', numUsers=len(user_dict))
 
 
 @app.route('/', methods=['POST'])
