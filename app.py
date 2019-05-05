@@ -205,10 +205,10 @@ def home_post():
 def register_post():
     res = handle_setup(request.form, "True")
     if res == 0:
-        return render_template('response_success.html',
+        return render_template('response_home.html',
                                response="Registration successful! Check your email inbox/spam for password.")
     else:
-        return render_template('response.html',
+        return render_template('response_home.html',
                                response="Registration failed! You're already registered. Check your email's inbox/spam folder for password.")
 
 
