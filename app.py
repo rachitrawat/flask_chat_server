@@ -29,48 +29,6 @@ NODE_PATH = "/home/" + getpass.getuser() + "/node/bin/node"
 DEBUG = True
 
 
-def registerUser(user):
-    output = "dummy"
-
-    try:
-        output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "registerUser.js", user]).decode(
-            'ascii').split()
-
-    except:
-        pass
-
-    if DEBUG:
-        print(' '.join(output))
-
-    if output[len(output) - 1] == "wallet":
-        return 0
-    else:
-        return 1
-
-
-def createMsg(req_obj):
-    user = req_obj['email']
-    msgText = req_obj['msgtext']
-    msgText = '__'.join(msgText.split())
-    output = "dummy"
-
-    try:
-        output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "invoke.js", "createMsg", msgText, user_dict[user]["wallet"], user]).decode(
-            'ascii').split()
-    except:
-        pass
-
-    if DEBUG:
-        print(' '.join(output))
-
-    if output[len(output) - 1] == "submitted":
-        return 0
-    else:
-        return 1
-
-
 def handle_setup(req_obj, flag):
     uid = req_obj['email']
 
@@ -111,6 +69,48 @@ def handle_setup(req_obj, flag):
             # if user exists and pwd does not match, fail
             else:
                 return 1
+
+
+def registerUser(user):
+    output = "dummy"
+
+    try:
+        output = subprocess.check_output(
+            [NODE_PATH, FABRIC_DIR + "registerUser.js", user]).decode(
+            'ascii').split()
+
+    except:
+        pass
+
+    if DEBUG:
+        print(' '.join(output))
+
+    if output[len(output) - 1] == "wallet":
+        return 0
+    else:
+        return 1
+
+
+def createMsg(req_obj):
+    user = req_obj['email']
+    msgText = req_obj['msgtext']
+    msgText = '__'.join(msgText.split())
+    output = "dummy"
+
+    try:
+        output = subprocess.check_output(
+            [NODE_PATH, FABRIC_DIR + "invoke.js", "createMsg", msgText, user_dict[user]["wallet"], user]).decode(
+            'ascii').split()
+    except:
+        pass
+
+    if DEBUG:
+        print(' '.join(output))
+
+    if output[len(output) - 1] == "submitted":
+        return 0
+    else:
+        return 1
 
 
 def flagMsg(req_obj):
@@ -193,9 +193,9 @@ def home_post():
                 query_lst = utils.format_query(raw_query_str, True)
                 return render_template('show_query.html', query_lst=query_lst)
             else:
-                return "Failed to query messages!"
+                return "Failed to query message!"
     else:
-        return "Invalid email/password."
+        return "Invalid email/password!"
 
 
 @app.route('/register', methods=['POST'])

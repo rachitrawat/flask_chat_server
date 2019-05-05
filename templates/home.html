@@ -7,11 +7,11 @@
 <body>
 <h1>New user? <a href="{{ url_for('register') }}">Register</a></h1>
 <form method="post">
-    E-mail: <input type="email" name="email">
+    E-mail: <input type="email" size="35" name="email" required>
     <br>
-    Password: <input type="password" name="pwd">
+    Password: <input type="password" name="pwd" size="8" required minlength="4">
     <br>
-    Message: <input name="msgtext">
+    Message: <textarea name="msgtext" maxlength="280" cols="40" rows="6"></textarea>
     <input type="submit" name="submit_button" value="Post Message">
     <br>
     Message ID: <input name="msgID">
