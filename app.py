@@ -41,7 +41,9 @@ def handle_setup(req_obj, flag):
             return 1
         # else assign user with a wallet
         else:
-            pwd = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(4))
+            pwd = ''.join(
+                random.SystemRandom().choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in
+                range(4))
             utils.send_verification_email(uid, pwd)
             wallet_id = random.choice(available_wallets)
             available_wallets.remove(wallet_id)
