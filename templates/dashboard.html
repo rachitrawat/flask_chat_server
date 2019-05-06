@@ -5,8 +5,10 @@
             <textarea name="msgtext" maxlength="140" cols="40" rows="6" id="textBox"
                       placeholder="Type your message here..."></textarea>
             <br>
-            <button type="button" onclick="submitMsg()">Post Message</button>
-            <input type="submit" name="submit_button" value="Post Message" id="submit_msg_button">
+            <p>Message remains <em>anonymous</em> unless 50% of users flag it
+            <p>
+                <button type="button" onclick="submitMsg()">Post Message</button>
+                <input type="submit" name="submit_button" value="Post Message" id="submit_msg_button">
         </div>
 
         <input type="submit" name="submit_button" value="See All Messages" id="submit_query_all_button">
@@ -22,7 +24,7 @@
 
     </form>
 
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <h3><a href="{{ url_for('logout') }}">Logout</a></h3>
 
 
     <footer>
