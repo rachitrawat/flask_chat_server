@@ -5,57 +5,9 @@
         <div>
             Ashoka Email: <input type="email" size="35" name="email" required pattern="[a-z0-9._%+-]+@ashoka.edu.in">
             <br>
-            Password: <input type="password" name="pwd" size="8" required minlength="4">
-        </div>
-
-        <div>
-            <textarea name="msgtext" maxlength="140" cols="40" rows="6" id="textBox"
-                      placeholder="Type your message here..."></textarea>
+            Password: <input type="password" name="pwd" size="31" required minlength="4">
             <br>
-            <button type="button" onclick="submitMsg()">Post Message</button>
-            <input type="submit" name="submit_button" value="Post Message" id="submit_msg_button">
+            <input type="submit" name="submit_button" value="Login" id="submit_login_button">
         </div>
-
-        <input type="submit" name="submit_button" value="See All Messages" id="submit_query_all_button">
-
-        <div>
-            Message ID: <input type="number" name="msgID" size="8" min="0" id="msgIDBox">
-            <button type="button" onclick="submitFlagID()">Flag Message</button>
-            <button type="button" onclick="submitQueryID()">Query Message</button>
-
-            <input type="submit" name="submit_button" value="Flag Message" id="submit_flag_button">
-            <input type="submit" name="submit_button" value="Query Message" id="submit_query_button">
-        </div>
-
     </form>
-
-    <footer>
-        <p>Total Registered Users: {{ numUsers }}</p>
-    </footer>
-
-    <script>
-        function submitMsg() {
-            if (document.getElementById("textBox").value) {
-                document.getElementById("submit_msg_button").click();
-            } else {
-                alert("Message cannot be empty!")
-            }
-        }
-
-        function submitFlagID() {
-            if (document.getElementById("msgIDBox").value) {
-                document.getElementById("submit_flag_button").click();
-            } else {
-                alert("Message ID cannot be empty!")
-            }
-        }
-
-        function submitQueryID() {
-            if (document.getElementById("msgIDBox").value) {
-                document.getElementById("submit_query_button").click();
-            } else {
-                alert("Message ID cannot be empty!")
-            }
-        }
-    </script>
 {% endblock %}

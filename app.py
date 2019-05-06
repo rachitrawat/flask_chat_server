@@ -5,11 +5,18 @@ import random
 import string
 import subprocess
 
-from flask import Flask, render_template, request
+import flask_login
+from flask import Flask, request, redirect
+from flask import render_template
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 
 import utils
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = ''
+app.config['SECRET_KEY'] = "lkkajdghdadkglajkgah"
 
 db_path = "/home/r/PycharmProjects/flask_chat_server/client_db.json"
 user_dict = {}
@@ -59,19 +66,6 @@ def handle_setup(req_obj, flag):
                 return 1
             utils.write_file(db_path, json.dumps(user_dict))
             return 0
-    # login
-    elif flag == "False":
-        pwd = req_obj['pwd']
-        # if user does not exist or pwd does not match, fail
-        if uid not in user_dict or pwd != user_dict[uid]["pwd"]:
-            return 1
-        else:
-            # if user exists and pwd matches, pass
-            if pwd == user_dict[uid]["pwd"]:
-                return 0
-            # if user exists and pwd does not match, fail
-            else:
-                return 1
 
 
 def registerUser(user):
@@ -162,43 +156,75 @@ def queryAllMsgs(req_obj, byID=False):
         return 1, " "
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+
+@app.route('/logout/')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
+
 @app.route('/')
 def home():
-    return render_template('home.html', numUsers=len(user_dict))
+    return render_template('home.html')
 
 
 @app.route('/', methods=['POST'])
 def home_post():
-    res = handle_setup(request.form, "False")
-    if res == 0:
-        if request.form['submit_button'] == 'Post Message':
-            if res == 0:
-                createMsg(request.form)
-                return render_template('response.html', response="Message posted successfully!")
-            else:
-                return render_template('response.html', response="Failed to post message!")
-        elif request.form['submit_button'] == 'See All Messages':
-            res, raw_query_str = queryAllMsgs(request.form)
-            if res == 0:
-                query_lst = utils.format_query(raw_query_str)
-                return render_template('show_query.html', query_lst=query_lst)
-            else:
-                return render_template('response.html', response="Failed to query messages!")
-        elif request.form['submit_button'] == 'Flag Message':
-            res = flagMsg(request.form)
-            if res == 0:
-                return render_template('response.html', response="Message flagged successfully!")
-            else:
-                return render_template('response.html', response="Failed to flag message!")
-        elif request.form['submit_button'] == 'Query Message':
-            res, raw_query_str = queryAllMsgs(request.form, True)
-            if res == 0:
-                query_lst = utils.format_query(raw_query_str, True)
-                return render_template('show_query.html', query_lst=query_lst)
-            else:
-                return render_template('response.html', response="Failed to query message!")
+    if request.form['email'] in user_dict and user_dict[request.form['email']]['pwd'] == request.form['pwd']:
+        login_user(User(request.form['email']))
+        return redirect('/dashboard')
     else:
         return render_template('response.html', response="Invalid email/password!")
+
+
+@app.route('/dashboard/')
+@login_required
+def dashboard():
+    return render_template('dashboard.html', numUsers=len(user_dict))
+
+
+@app.route('/dashboard/', methods=['POST'])
+@login_required
+def dashboard_post():
+    req_dict = {}
+    req_dict['email'] = flask_login.current_user.id
+    if request.form['submit_button'] == 'Post Message':
+        req_dict['msgtext'] = request.form['msgtext']
+        if createMsg(req_dict) == 0:
+            return render_template('response.html', response="Message posted successfully!")
+        else:
+            return render_template('response.html', response="Failed to post message!")
+    elif request.form['submit_button'] == 'See All Messages':
+        res, raw_query_str = queryAllMsgs(req_dict)
+        if res == 0:
+            query_lst = utils.format_query(raw_query_str)
+            return render_template('show_query.html', query_lst=query_lst)
+        else:
+            return render_template('response.html', response="Failed to query messages!")
+    elif request.form['submit_button'] == 'Flag Message':
+        req_dict['msgID'] = request.form['msgID']
+        if flagMsg(req_dict) == 0:
+            return render_template('response.html', response="Message flagged successfully!")
+        else:
+            return render_template('response.html', response="Failed to flag message!")
+    elif request.form['submit_button'] == 'Query Message':
+        req_dict['msgID'] = request.form['msgID']
+        res, raw_query_str = queryAllMsgs(req_dict, True)
+        if res == 0:
+            query_lst = utils.format_query(raw_query_str, True)
+            return render_template('show_query.html', query_lst=query_lst)
+        else:
+            return render_template('response.html', response="Failed to query message!")
 
 
 @app.route('/register', methods=['POST'])
