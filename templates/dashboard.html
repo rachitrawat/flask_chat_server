@@ -31,10 +31,10 @@
 
     <script>
         function submitMsg() {
-            if (document.getElementById("textBox").value) {
+            if (document.getElementById("textBox").value && document.getElementById("textBox").value !== "$HELLO$") {
                 document.getElementById("submit_msg_button").click();
             } else {
-                alert("Message cannot be empty!")
+                alert("Invalid message!")
             }
         }
 
