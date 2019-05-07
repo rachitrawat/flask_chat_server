@@ -142,15 +142,14 @@ def queryAllMsgs(req_obj, byID=False):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "query.js", msgID, user_dict[user]["wallet"]]).decode(
-            'ascii').split()
+            [NODE_PATH, FABRIC_DIR + "query.js", msgID, user_dict[user]["wallet"]]).split()
     except:
         pass
 
     if DEBUG:
         print(' '.join(output))
 
-    if output != "dummy" and output[6] == "evaluated,":
+    if output != "dummy" and output[6].decode('ascii') == "evaluated,":
         return 0, json.loads(output[len(output) - 1])
     else:
         return 1, " "
