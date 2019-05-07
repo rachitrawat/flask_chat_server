@@ -73,8 +73,7 @@ def registerUser(user):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "registerUser.js", user]).decode(
-            'ascii').split()
+            [NODE_PATH, FABRIC_DIR + "registerUser.js", user]).split()
 
     except:
         pass
@@ -82,7 +81,7 @@ def registerUser(user):
     if DEBUG:
         print(' '.join(output))
 
-    if output[len(output) - 1] == "wallet":
+    if output != "dummy" and output[len(output) - 1].decode('ascii') == "wallet":
         return 0
     else:
         return 1
@@ -96,15 +95,14 @@ def createMsg(req_obj):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "invoke.js", "createMsg", msgText, user_dict[user]["wallet"], user]).decode(
-            'ascii').split()
+            [NODE_PATH, FABRIC_DIR + "invoke.js", "createMsg", msgText, user_dict[user]["wallet"], user]).split()
     except:
         pass
 
     if DEBUG:
         print(' '.join(output))
 
-    if output[len(output) - 1] == "submitted":
+    if output != "dummy" and output[len(output) - 1].decode('ascii') == "submitted":
         return 0
     else:
         return 1
@@ -117,15 +115,14 @@ def flagMsg(req_obj):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "invoke.js", "flagMsg", msgID, user_dict[user]["wallet"]]).decode(
-            'ascii').split()
+            [NODE_PATH, FABRIC_DIR + "invoke.js", "flagMsg", msgID, user_dict[user]["wallet"]]).split()
     except:
         pass
 
     if DEBUG:
         print(' '.join(output))
 
-    if output[len(output) - 1] == "submitted":
+    if output != "dummy" and output[len(output) - 1].decode('ascii') == "submitted":
         return 0
     else:
         return 1
@@ -215,7 +212,8 @@ def dashboard_post():
         if flagMsg(req_dict) == 0:
             return render_template('response.html', response="Message flagged successfully!")
         else:
-            return render_template('response.html', response="Failed to flag message!")
+            return render_template('response.html',
+                                   response="Failed to flag message! Are you entering a valid message ID?")
     elif request.form['submit_button'] == 'Query Message':
         req_dict['msgID'] = request.form['msgID']
         res, raw_query_str = queryAllMsgs(req_dict, True)
@@ -223,7 +221,8 @@ def dashboard_post():
             query_lst = utils.format_query(raw_query_str, True)
             return render_template('show_query.html', query_lst=query_lst)
         else:
-            return render_template('response.html', response="Failed to query message!")
+            return render_template('response.html',
+                                   response="Failed to query message! Are you entering a valid message ID?")
 
 
 @app.route('/register', methods=['POST'])
