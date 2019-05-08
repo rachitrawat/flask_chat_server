@@ -90,6 +90,7 @@ def registerUser(user):
 def createMsg(req_obj):
     user = req_obj['email']
     msgText = req_obj['msgtext']
+    msgText = ''.join([i if ord(i) < 128 else ' ' for i in msgText])
     msgText = '__'.join(msgText.split())
     output = "dummy"
 

@@ -116,6 +116,7 @@ def format_query(raw_query_str, byID=False):
         od = collections.OrderedDict(sorted(query_dict.items()))
         for k, v in od.items():
             query_lst.append(str(k) + " " + v)
+        query_lst.reverse()
     else:
         if 'owner' in data:
             msg = ' '.join(data['msgText'].split('__')) + " " + data['owner']
