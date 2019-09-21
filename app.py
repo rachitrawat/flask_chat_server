@@ -18,7 +18,7 @@ login_manager.init_app(app)
 login_manager.login_view = ''
 app.config['SECRET_KEY'] = "lkkajdghdadkglajkgah"
 
-db_path = "/home/r/PycharmProjects/flask_chat_server/client_db.json"
+db_path = "/home/r/PycharmProjects/fabchat_flask_server/client_db.json"
 user_dict = {}
 available_wallets = [x for x in range(1, 10000)]
 if os.path.isfile(db_path):
@@ -32,8 +32,8 @@ if os.path.isfile(db_path):
 else:
     utils.write_file(db_path, "{}")
 
-FABRIC_DIR = "/home/" + getpass.getuser() + "/WebstormProjects/hyperledger_project/fabchat/javascript/"
-NODE_PATH = "/home/" + getpass.getuser() + "/node/bin/node"
+FABRIC_DIR = "/home/" + getpass.getuser() + "/FabricProjects/fabchat/fabchat/javascript/"
+NODE_PATH = "node"
 DEBUG = False
 
 
@@ -73,15 +73,14 @@ def registerUser(user):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "registerUser.js", user]).split()
-
+            [NODE_PATH, FABRIC_DIR + "registerUser.js", user]).decode().split()
     except:
         pass
 
     if DEBUG:
         print(' '.join(output))
 
-    if output != "dummy" and output[len(output) - 1].decode('ascii') == "wallet":
+    if output != "dummy" and output[len(output) - 1] == "wallet":
         return 0
     else:
         return 1
@@ -96,14 +95,15 @@ def createMsg(req_obj):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "invoke.js", "createMsg", msgText, user_dict[user]["wallet"], user]).split()
+            [NODE_PATH, FABRIC_DIR + "invoke.js", "createMsg", msgText, user_dict[user]["wallet"],
+             user]).decode().split()
     except:
         pass
 
     if DEBUG:
         print(' '.join(output))
 
-    if output != "dummy" and output[len(output) - 1].decode('ascii') == "submitted":
+    if output != "dummy" and output[len(output) - 1] == "submitted":
         return 0
     else:
         return 1
@@ -116,14 +116,14 @@ def flagMsg(req_obj):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "invoke.js", "flagMsg", msgID, user_dict[user]["wallet"]]).split()
+            [NODE_PATH, FABRIC_DIR + "invoke.js", "flagMsg", msgID, user_dict[user]["wallet"]]).decode().split()
     except:
         pass
 
     if DEBUG:
         print(' '.join(output))
 
-    if output != "dummy" and output[len(output) - 1].decode('ascii') == "submitted":
+    if output != "dummy" and output[len(output) - 1] == "submitted":
         return 0
     else:
         return 1
@@ -140,14 +140,14 @@ def queryAllMsgs(req_obj, byID=False):
 
     try:
         output = subprocess.check_output(
-            [NODE_PATH, FABRIC_DIR + "query.js", msgID, user_dict[user]["wallet"]]).split()
+            [NODE_PATH, FABRIC_DIR + "query.js", msgID, user_dict[user]["wallet"]]).decode().split()
     except:
         pass
 
     if DEBUG:
         print(' '.join(output))
 
-    if output != "dummy" and output[6].decode('ascii') == "evaluated,":
+    if output != "dummy" and output[6] == "evaluated,":
         return 0, json.loads(output[len(output) - 1])
     else:
         return 1, " "

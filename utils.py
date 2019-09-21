@@ -103,7 +103,7 @@ def send_verification_email(recv_addr, pwd):
 
 
 def format_query(raw_query_str, byID=False):
-    data = ast.literal_eval(raw_query_str)
+    data = raw_query_str
     query_dict = {}
     query_lst = []
     if not byID:
