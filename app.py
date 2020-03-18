@@ -33,7 +33,7 @@ else:
     utils.write_file(db_path, "{}")
 
 FABRIC_DIR = "/home/" + getpass.getuser() + "/FabricProjects/fabchat/fabchat/javascript/"
-NODE_PATH = "node"
+NODE_PATH = "/usr/local/lib/node/bin/node"
 DEBUG = False
 
 
@@ -50,7 +50,7 @@ def handle_setup(req_obj, flag):
         # else assign user with a wallet
         else:
             pwd = ''.join(
-                random.SystemRandom().choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in
+                random.SystemRandom().choice(string.digits) for _ in
                 range(4))
             utils.send_verification_email(uid, pwd)
             wallet_id = random.choice(available_wallets)

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
     <form method="post">
-        Ashoka Email: <input type="email" name="email" size="35" required pattern="[a-z0-9._%+-]+@ashoka.edu.in">
+        Ashoka Email: <input type="email" name="email" size="35" required
+                             pattern="[a-z0-9._%+-]+@(([a-z0-9._%+-]+\.ashoka\.edu\.in)|(ashoka\.edu\.in))">
         <br>
         <input type="submit" value="Register">
     </form>

@@ -2,7 +2,8 @@
 {% block content %}
     <form method="post" id="mainForm">
         <div>
-            Ashoka Email: <input type="email" size="35" name="email" required pattern="[a-z0-9._%+-]+@ashoka.edu.in">
+            Ashoka Email: <input type="email" size="35" name="email" required
+                                 pattern="[a-z0-9._%+-]+@(([a-z0-9._%+-]+\.ashoka\.edu\.in)|(ashoka\.edu\.in))">
             <br>
             Password: <input type="password" name="pwd" size="31" required minlength="4">
             <br>

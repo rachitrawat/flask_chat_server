@@ -1,58 +1,5 @@
-import ast
 import collections
-import os
 import smtplib
-
-
-def send_file(file_name, socket_obj):
-    """ Robust file transfer method """
-    BYTES_RECV = 1024
-
-    statinfo = os.stat(file_name)
-    file_size = statinfo.st_size
-
-    # encode filesize as 32 bit binary
-    fsize_b = bin(file_size)[2:].zfill(32)
-    socket_obj.send(fsize_b.encode('ascii'))
-
-    f = open(file_name, 'rb')
-
-    while file_size >= BYTES_RECV:
-        l = f.read(BYTES_RECV)
-        socket_obj.send(l)
-        file_size -= BYTES_RECV
-
-    if file_size > 0:
-        l = f.read(file_size)
-        socket_obj.send(l)
-
-    f.close()
-
-
-def recv_file(file_name, socket_obj):
-    """ Robust file transfer method """
-    BYTES_RECV = 1024
-
-    fsize_b = socket_obj.recv(32).decode('ascii')
-    fsize = int(fsize_b, 2)
-
-    f = open(file_name, 'wb')
-    file_size = fsize
-
-    while file_size >= BYTES_RECV:
-        buff = bytearray()
-        while len(buff) < BYTES_RECV:
-            buff.extend(socket_obj.recv(BYTES_RECV - len(buff)))
-        f.write(buff)
-        file_size -= BYTES_RECV
-
-    if file_size > 0:
-        buff = bytearray()
-        while len(buff) < file_size:
-            buff.extend(socket_obj.recv(file_size - len(buff)))
-        f.write(buff)
-
-    f.close()
 
 
 def write_file(file_name, string):
@@ -65,28 +12,6 @@ def read_file(file_name):
         content = f.readlines()
     content = [x.strip() for x in content]
     return content
-
-
-def ascii_len(s):
-    """ returns string size in bytes """
-    return len(s.encode('ascii'))
-
-
-def send_string(string, socket_obj):
-    size = ascii_len(string)
-
-    # encode string size as 32 bit binary
-    fsize_b = bin(size)[2:].zfill(32)
-    socket_obj.send(fsize_b.encode('ascii'))
-
-    socket_obj.send(string.encode('ascii'))
-
-
-def recv_string(socket_obj):
-    fsize_b = socket_obj.recv(32).decode('ascii')
-    fsize = int(fsize_b, 2)
-
-    return socket_obj.recv(fsize).decode('ascii')
 
 
 def send_verification_email(recv_addr, pwd):
