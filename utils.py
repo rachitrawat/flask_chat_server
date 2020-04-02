@@ -34,8 +34,8 @@ def format_query(raw_query_str, byID=False):
     if not byID:
         for idx, val in enumerate(data):
             val['Record']['msgText'] = ' '.join(val['Record']['msgText'].split('__'))
-            if 'owner' in val['Record']:
-                query_dict[int(val['Key'])] = val['Record']['msgText'] + " " + val['Record']['owner']
+            if 'emailID' in val['Record']:
+                query_dict[int(val['Key'])] = val['Record']['msgText'] + " " + val['Record']['emailID']
             else:
                 query_dict[int(val['Key'])] = val['Record']['msgText']
         od = collections.OrderedDict(sorted(query_dict.items()))
@@ -43,8 +43,8 @@ def format_query(raw_query_str, byID=False):
             query_lst.append(str(k) + " " + v)
         query_lst.reverse()
     else:
-        if 'owner' in data:
-            msg = ' '.join(data['msgText'].split('__')) + " " + data['owner']
+        if 'emailID' in data:
+            msg = ' '.join(data['msgText'].split('__')) + " " + data['emailID']
         else:
             msg = ' '.join(data['msgText'].split('__'))
         query_lst.append(msg)

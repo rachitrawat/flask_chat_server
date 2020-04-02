@@ -32,9 +32,10 @@ if os.path.isfile(db_path):
 else:
     utils.write_file(db_path, "{}")
 
-FABRIC_DIR = "/home/" + getpass.getuser() + "/FabricProjects/fabchat/fabchat/javascript/"
+FABRIC_DIR = "/home/" + getpass.getuser() + "/fabric-samples/fabchat/javascript/"
 NODE_PATH = "/usr/local/lib/node/bin/node"
-DEBUG = False
+DEBUG = True
+SEND_OTP = False
 
 
 def handle_setup(req_obj, flag):
@@ -52,7 +53,8 @@ def handle_setup(req_obj, flag):
             pwd = ''.join(
                 random.SystemRandom().choice(string.digits) for _ in
                 range(4))
-            utils.send_verification_email(uid, pwd)
+            if SEND_OTP:
+                utils.send_verification_email(uid, pwd)
             wallet_id = random.choice(available_wallets)
             available_wallets.remove(wallet_id)
             user_dict[uid] = {"pwd": pwd, "wallet": "user" + str(wallet_id)}
