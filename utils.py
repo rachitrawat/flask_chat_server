@@ -33,11 +33,11 @@ def format_query(raw_query_str, byID=False):
     query_lst = []
     if not byID:
         for idx, val in enumerate(data):
-            val['Record']['msgText'] = ' '.join(val['Record']['msgText'].split('__'))
-            if 'emailID' in val['Record']:
-                query_dict[int(val['Key'])] = val['Record']['msgText'] + " " + val['Record']['emailID']
+            val['msg']['msgText'] = ' '.join(val['msg']['msgText'].split('__'))
+            if 'emailID' in val['msg']:
+                query_dict[int(val['Key'])] = val['msg']['msgText'] + " " + val['msg']['emailID']
             else:
-                query_dict[int(val['Key'])] = val['Record']['msgText']
+                query_dict[int(val['Key'])] = val['msg']['msgText']
         od = collections.OrderedDict(sorted(query_dict.items()))
         for k, v in od.items():
             query_lst.append(str(k) + " " + v)
