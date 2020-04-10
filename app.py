@@ -33,7 +33,7 @@ else:
     utils.write_file(db_path, "{}")
 
 FABRIC_DIR = "/home/" + getpass.getuser() + "/fabric-samples/fabchat/javascript/"
-NODE_PATH = "/usr/local/lib/node/bin/node"
+NODE_PATH = "/usr/local/lib/nodejs/node-v12.16.2-linux-x64/bin/node"
 DEBUG = True
 SEND_OTP = False
 
