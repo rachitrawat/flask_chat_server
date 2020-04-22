@@ -16,15 +16,18 @@ def read_file(file_name):
 
 def send_verification_email(recv_addr, pwd):
     try:
+        with open("otp_id_pwd.txt") as f:
+            content = f.readlines()
+        content = [x.strip() for x in content]
         session = smtplib.SMTP('smtp.gmail.com', 587)
         session.starttls()
-        session.login("fabchat.service@gmail.com", "fabchat-test")
+        session.login(content[0], content[1])
         message = "Subject: Hi there!\n\nYour password is " + pwd + "."
         session.sendmail("fabchat.service@gmail.com", recv_addr, message)
         session.quit()
     except Exception as e:
         print(e)
-        return "-1"
+        return 1
 
 
 def format_query(raw_query_str, byID=False):

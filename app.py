@@ -35,7 +35,7 @@ else:
 FABRIC_DIR = "/home/" + getpass.getuser() + "/fabric-samples/fabchat/javascript/"
 NODE_PATH = "/usr/local/lib/nodejs/node-v12.16.2-linux-x64/bin/node"
 DEBUG = True
-SEND_OTP = False
+SEND_OTP = True
 
 
 def handle_setup(req_obj, flag):
@@ -54,7 +54,8 @@ def handle_setup(req_obj, flag):
                 random.SystemRandom().choice(string.digits) for _ in
                 range(4))
             if SEND_OTP:
-                utils.send_verification_email(uid, pwd)
+                if utils.send_verification_email(uid, pwd) == 1:
+                    return 1
             wallet_id = random.choice(available_wallets)
             available_wallets.remove(wallet_id)
             user_dict[uid] = {"pwd": pwd, "wallet": "user" + str(wallet_id)}
